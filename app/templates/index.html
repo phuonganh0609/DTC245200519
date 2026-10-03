@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Tổng quan hệ thống</h2><p>Bốn nhóm chức năng theo yêu cầu đề tài.</p>
+<div class="cards">{% for key, item in modules.items() %}<section class="card"><h3>{{ item.title }}</h3><strong>{{ counts[key] }}</strong><p>Bản ghi hiện có</p><a href="/{{ key }}">Mở quản lý →</a></section>{% endfor %}</div>
+{% endblock %}

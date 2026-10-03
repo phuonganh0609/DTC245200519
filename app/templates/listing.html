@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Quản lý {{ config.title | lower }}</h2>
+<section class="panel"><h3>{{ 'Sửa bản ghi' if record else 'Thêm bản ghi' }}</h3><form method="post" action="/{{ module }}" class="fields">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+{% if record %}<input type="hidden" name="record_id" value="{{ record.id }}">{% endif %}
+{% for key,label,kind in config.fields %}<label>{{ label }}
+{% if kind == 'textarea' %}<textarea name="{{ key }}" maxlength="2000" required>{{ record[key] if record else '' }}</textarea>
+{% elif kind in ['fee_status','complaint_status'] %}{% set choices = ['Chưa thanh toán','Đã thanh toán'] if kind == 'fee_status' else ['Mới tiếp nhận','Đang xử lý','Đã giải quyết'] %}<select name="{{ key }}">{% for value in choices %}<option {% if record and record[key] == value %}selected{% endif %}>{{ value }}</option>{% endfor %}</select>
+{% else %}<input name="{{ key }}" value="{{ record[key] if record else '' }}" type="{{ kind }}" maxlength="2000" {% if kind == 'number' %}min="0.01" max="999999999999.99" step="0.01"{% endif %} required>{% endif %}</label>{% endfor %}
+<div><button type="submit">{{ 'Lưu thay đổi' if record else 'Thêm bản ghi' }}</button>{% if record %} <a href="/{{ module }}">Hủy sửa</a>{% endif %}</div></form></section>
+<section class="panel"><h3>Danh sách ({{ rows | length }} bản ghi)</h3><div class="table-wrap"><table><thead><tr><th>ID</th>{% for key,label,kind in config.fields %}<th>{{ label }}</th>{% endfor %}<th>Thao tác</th></tr></thead><tbody>
+{% for row in rows %}<tr><td>{{ row.id }}</td>{% for key,label,kind in config.fields %}<td>{{ row[key] }}</td>{% endfor %}<td class="actions">
+<p><a href="/{{ module }}?edit={{ row.id }}">Sửa bản ghi</a></p>
+{% if module in ['fees','complaints'] %}<form method="post" action="/{{ module }}/{{ row.id }}/status" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><select name="status">{% set choices = ['Chưa thanh toán','Đã thanh toán'] if module == 'fees' else ['Mới tiếp nhận','Đang xử lý','Đã giải quyết'] %}{% for value in choices %}<option {% if row.status == value %}selected{% endif %}>{{ value }}</option>{% endfor %}</select><button>Lưu</button></form>{% endif %}
+<form method="post" action="/{{ module }}/{{ row.id }}/delete"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="danger">Xóa</button></form></td></tr>
+{% else %}<tr><td colspan="{{ config.fields | length + 2 }}">Chưa có dữ liệu.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

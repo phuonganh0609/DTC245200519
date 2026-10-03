@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản lý chung cư · Đề 36</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f3f6fa;color:#17253a;font:16px system-ui,sans-serif}header{background:#17253a;color:white;padding:24px 6%}header h1{margin:0 0 8px;font-size:26px}header p{margin:0;color:#d6e4f6}nav{display:flex;flex-wrap:wrap;gap:12px;padding:18px 6%;background:white}nav a,a{color:#175eb4}main{max-width:1180px;margin:28px auto;padding:0 24px}.panel,.card{background:white;padding:24px;border-radius:12px;margin-bottom:24px;box-shadow:0 2px 8px #17253a0a}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}.card strong{font-size:36px;display:block;margin:12px 0}.note{background:#e7f1ff;padding:14px;border-radius:8px}form.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}label{display:block;font-weight:600}input,textarea,select{width:100%;padding:10px;margin-top:8px;border:1px solid #c8d2df;border-radius:6px;font:inherit}textarea{min-height:90px}button{background:#175eb4;color:white;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;font:inherit}.danger{background:#a82a33}table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;border-bottom:1px solid #e2e8f0;padding:12px;vertical-align:top;white-space:pre-wrap;overflow-wrap:anywhere}.table-wrap{overflow:auto}footer{padding:24px;text-align:center;color:#59677a}.inline{display:flex;gap:8px;align-items:center}.inline select{min-width:160px;margin:0}.actions{min-width:260px}.actions form{margin-bottom:10px}
+  </style>
+</head>
+<body>
+<header><h1>Hệ thống Quản lý Chung cư / Căn hộ</h1><p>Đề 36 · DTC245200519 · Thực hành triển khai và quản trị</p></header>
+<nav><a href="/">Tổng quan</a>{% for key, item in modules.items() %}<a href="/{{ key }}">{{ item.title }}</a>{% endfor %}</nav>
+<main><p class="note">Môi trường thực hành. Dữ liệu mẫu giả lập được tạo theo sự cho phép của người học.</p>
+{% for message in get_flashed_messages() %}<p class="note">{{ message }}</p>{% endfor %}
+{% block content %}{% endblock %}</main>
+<footer>Môn Triển khai và Quản trị Hệ thống Phần mềm</footer>
+</body></html>

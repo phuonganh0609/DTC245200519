@@ -17,8 +17,8 @@ Các ô chưa đánh dấu là công việc chưa được nghiệm thu. Danh s�
 ## Nhiệm vụ
 
 - [x] 01. Chuẩn bị checklist và khung báo cáo.
-- [ ] 02. Xác minh môi trường; thống nhất công nghệ và dữ liệu được phép dùng.
-- [ ] 03. Triển khai web đúng bốn nhóm chức năng, PostgreSQL và pgAdmin.
+- [x] 02. Xác minh môi trường: Ubuntu WSL2, Docker Desktop theo lựa chọn người học; web Python; được phép dùng dữ liệu mẫu giả lập.
+- [x] 03. Triển khai web đúng bốn nhóm chức năng, PostgreSQL và pgAdmin. Đã kiểm tra kết nối thật và CRUD cư dân; người học chưa chụp minh chứng.
 - [ ] 04. Triển khai Nginx reverse proxy và HTTPS hoặc security headers (mốc commit 1 trong đề).
 - [ ] 05. Triển khai giám sát container, web, DB (mốc commit 2 trong đề).
 - [ ] 06. Triển khai Loki + Promtail và 2–3 query LogQL (mốc commit 3 trong đề).
@@ -29,7 +29,7 @@ Mỗi nhiệm vụ hoàn thành đều commit/push theo yêu cầu người họ
 
 ## Điều cần xác nhận
 
-- Môi trường: Ubuntu VMware, Ubuntu WSL2 hoặc lựa chọn được người học cho phép.
-- Công nghệ web: Python hoặc Node.js theo gợi ý đề 36; cần chọn cách triển khai phù hợp môi trường.
-- Dữ liệu: chưa thêm bản ghi cư dân, căn hộ, phí, thông báo hoặc khiếu nại khi chưa được phép.
+- Đã xác nhận Ubuntu WSL2 dùng Docker Desktop hiện có. Đây là lựa chọn người học cho phép, khác hướng dẫn cài Docker trực tiếp trong Ubuntu ở lab 3.
+- Đã chọn web Python theo gợi ý đề 36.
+- Đã được phép tạo dữ liệu mẫu giả lập; không thu thập dữ liệu người thật từ bên ngoài.
 - Thông tin bìa còn thiếu: họ tên, lớp, giảng viên và thông tin trường/khoa theo mẫu người học sử dụng.

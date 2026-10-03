@@ -10,14 +10,43 @@ Website quản lý cư dân, phí dịch vụ, thông báo và khiếu nại. C�
 
 ## Trạng thái thực hành
 
-Đã lập checklist tiêu chí và khung báo cáo. Chưa triển khai ứng dụng; chưa có dữ liệu mẫu; chưa xác minh môi trường chạy.
+Đã triển khai web Python, PostgreSQL và pgAdmin bằng Compose, chạy trên Ubuntu WSL2 với Docker Desktop theo lựa chọn của người học. Website có xem/thêm/sửa/xóa trong bốn nhóm chức năng; phí và khiếu nại có cập nhật trạng thái. Dữ liệu mẫu giả lập đã được người học cho phép.
 
-Hướng dẫn chạy sẽ được bổ sung sau khi hệ thống được triển khai và kiểm tra thực tế.
+Đã kiểm chứng kết nối DB, bốn trang chức năng, thao tác thêm/sửa/xóa cư dân, bảo vệ CSRF, user non-root và quyền DB hạn chế. Đã đăng nhập và kết nối pgAdmin với PostgreSQL.
+
+Chưa hoàn thành Nginx, Prometheus/Grafana, Loki/Promtail và nghiệm thu hardening tổng thể. Đây là giai đoạn đầu của đề tài, chưa đạt toàn bộ tiêu chí.
+
+## Chạy trong Ubuntu WSL2
+
+Điều kiện: Docker Desktop đang chạy và Ubuntu đã được tích hợp với Docker Desktop. Chạy các lệnh trong thư mục dự án:
+
+```bash
+python3 scripts/prepare-env.py
+docker compose up -d --build
+bash scripts/verify.sh
+```
+
+- Website: http://localhost:8036
+- pgAdmin: http://localhost:8136
+- Thông tin đăng nhập pgAdmin nằm trong `.env`: `PGADMIN_EMAIL`, `PGADMIN_PASSWORD`.
+- Đăng ký server trong pgAdmin: host `db`, port `5432`, database `chungcu_dtc245200519`, username từ `POSTGRES_USER`, password từ `POSTGRES_PASSWORD`.
+
+Lệnh `prepare-env.py` chỉ tạo `.env` khi chưa có, không ghi đè mật khẩu hiện tại. `.env` không được commit. Cổng web và pgAdmin chỉ mở trên localhost. PostgreSQL không mở cổng ra máy host.
+
+```bash
+docker compose ps                  # Xem trạng thái
+docker compose logs --tail 30 web  # Xem log web
+docker compose stop               # Dừng dịch vụ, giữ dữ liệu
+docker compose start              # Chạy lại
+```
+
+Volume `db_data` và `pgadmin_data` giữ dữ liệu. Script `db/init.sh` chỉ chạy lúc volume PostgreSQL còn trống; không dùng `docker compose down -v` khi cần giữ dữ liệu.
 
 ## Tài liệu dự án
 
 - [Checklist tiêu chí và tiến độ](docs/checklist.md)
 - [Khung báo cáo thực hành](docs/bao-cao-thuc-hanh.md)
+- [Bước 1: web, database và hướng dẫn chụp minh chứng](docs/buoc-01-web-db.md)
 
 ## Quy tắc thực hiện
 
