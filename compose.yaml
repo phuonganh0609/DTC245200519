@@ -8,9 +8,12 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       APP_DB_USER: ${APP_DB_USER}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      MONITOR_DB_USER: ${MONITOR_DB_USER}
+      MONITOR_DB_PASSWORD: ${MONITOR_DB_PASSWORD}
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./db/init.sh:/docker-entrypoint-initdb.d/01-init.sh:ro
+      - ./db/setup-monitoring.sh:/opt/setup-monitoring.sh:ro
     networks: [db_net]
     healthcheck:
       test: [CMD-SHELL, 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
@@ -48,7 +51,7 @@ services:
     ports: ["127.0.0.1:8036:8080"]
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    networks: [web_net]
+    networks: [web_net, monitor_net]
     depends_on:
       web:
         condition: service_healthy
@@ -61,6 +64,76 @@ services:
       interval: 15s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
+  cadvisor:
+    image: ghcr.io/google/cadvisor:latest
+    command:
+      - --docker_only=true
+      - --housekeeping_interval=15s
+      - --store_container_labels=false
+      - --whitelisted_container_labels=com.docker.compose.project,com.docker.compose.service
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+    networks: [monitor_net]
+    restart: unless-stopped
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:1.4.0
+    command: ["--nginx.scrape-uri=http://nginx:8081/stub_status"]
+    networks: [monitor_net]
+    depends_on:
+      nginx:
+        condition: service_healthy
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.16.0
+    environment:
+      DATA_SOURCE_URI: db:5432/${POSTGRES_DB}?sslmode=disable
+      DATA_SOURCE_USER: ${MONITOR_DB_USER}
+      DATA_SOURCE_PASS: ${MONITOR_DB_PASSWORD}
+    networks: [db_net, monitor_net]
+    depends_on:
+      db:
+        condition: service_healthy
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=7d
+      - --storage.tsdb.retention.size=1GB
+    ports: ["127.0.0.1:9036:9090"]
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks: [monitor_net]
+    depends_on: [cadvisor, nginx-exporter, postgres-exporter]
+    restart: unless-stopped
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+    ports: ["127.0.0.1:3036:3000"]
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    networks: [monitor_net]
+    depends_on: [prometheus]
     restart: unless-stopped
   pgadmin:
     image: dpage/pgadmin4:8.14
@@ -79,6 +152,9 @@ networks:
     internal: true
   web_net:
   admin_net:
+  monitor_net:
 volumes:
   db_data:
   pgadmin_data:
+  prometheus_data:
+  grafana_data:

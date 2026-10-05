@@ -1,0 +1,9 @@
+apiVersion: 1
+providers:
+  - name: De36
+    folder: De36
+    type: file
+    allowUiUpdates: false
+    updateIntervalSeconds: 15
+    options:
+      path: /var/lib/grafana/dashboards

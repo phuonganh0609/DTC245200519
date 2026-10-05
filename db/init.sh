@@ -17,3 +17,4 @@ INSERT INTO fees(apartment,description,amount,due_date,status) VALUES ('A101','P
 INSERT INTO announcements(title,content) VALUES ('Thông báo mẫu: vệ sinh khu vực chung','Dữ liệu giả lập phục vụ bài thực hành đề 36.');
 INSERT INTO complaints(apartment,content,status) VALUES ('B201','Khiếu nại mẫu: đèn hành lang cần kiểm tra.','Mới tiếp nhận');
 SQL
+sh /opt/setup-monitoring.sh
