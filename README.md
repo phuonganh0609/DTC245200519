@@ -18,7 +18,9 @@ Website quản lý cư dân, phí dịch vụ, thông báo và khiếu nại. C�
 
 Đã tích hợp Prometheus và Grafana: bốn targets UP, metrics container/Nginx/PostgreSQL có dữ liệu thật. Dashboard riêng của đề 36 được provision từ file JSON trong repository.
 
-Chưa hoàn thành Loki/Promtail và nghiệm thu hardening tổng thể; chưa đạt toàn bộ tiêu chí.
+Đã triển khai Loki + Promtail và datasource Loki-De36 trong Grafana. Ba query LogQL đã trả log HTTP mới thực tế. Promtail chỉ thu log web, Nginx, PostgreSQL và pgAdmin của project đề 36.
+
+Chưa hoàn thành nghiệm thu hardening tổng thể và báo cáo cuối cùng; chưa đạt toàn bộ tiêu chí.
 
 ## Chạy trong Ubuntu WSL2
 
@@ -28,15 +30,19 @@ Chưa hoàn thành Loki/Promtail và nghiệm thu hardening tổng thể; chưa 
 python3 scripts/prepare-env.py
 docker compose up -d --build
 bash scripts/start-monitoring.sh
+bash scripts/start-logs.sh
 bash scripts/verify.sh
 python3 scripts/verify-nginx.py
 python3 scripts/verify-monitoring.py
+python3 scripts/verify-logs.py
 ```
 
 - Website qua Nginx: http://localhost:8036
 - pgAdmin: http://localhost:8136
 - Prometheus Targets: http://localhost:9036/targets
 - Dashboard Grafana: http://localhost:3036/d/de36-monitoring
+- Truy vấn log: http://localhost:3036/explore, chọn datasource `Loki-De36`, chế độ `Code`.
+- Loki API: http://localhost:3136 (chỉ mở localhost, không có giao diện duyệt log tại trang gốc).
 - Grafana: tài khoản `admin`, mật khẩu từ `GRAFANA_PASSWORD` trong `.env`.
 - Thông tin đăng nhập pgAdmin nằm trong `.env`: `PGADMIN_EMAIL`, `PGADMIN_PASSWORD`.
 - Đăng ký server trong pgAdmin: host `db`, port `5432`, database `chungcu_dtc245200519`, username từ `POSTGRES_USER`, password từ `POSTGRES_PASSWORD`.
@@ -61,6 +67,7 @@ Volume `db_data` và `pgadmin_data` giữ dữ liệu. Script `db/init.sh` chỉ
 - [Bước 1: web, database và hướng dẫn chụp minh chứng](docs/buoc-01-web-db.md)
 - [Bước 2: Nginx reverse proxy và security headers](docs/buoc-02-nginx.md)
 - [Bước 3: Giám sát bằng Prometheus và Grafana](docs/buoc-03-giam-sat.md)
+- [Bước 4: Log tập trung và ba truy vấn LogQL](docs/buoc-04-log.md)
 
 ## Quy tắc thực hiện
 

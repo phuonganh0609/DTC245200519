@@ -21,7 +21,7 @@ Các ô chưa đánh dấu là công việc chưa được nghiệm thu. Danh s�
 - [x] 03. Triển khai web đúng bốn nhóm chức năng, PostgreSQL và pgAdmin. Đã kiểm tra kết nối thật và CRUD cư dân; người học chưa chụp minh chứng.
 - [x] 04. Triển khai Nginx reverse proxy và security headers (mốc commit 1 trong đề). Đã kiểm tra bốn trang chức năng, health endpoint và headers trên HTTP 404; người học tự chụp minh chứng.
 - [x] 05. Triển khai giám sát container, Nginx, PostgreSQL (mốc commit 2 trong đề). Bốn targets UP; mọi panel dashboard có dữ liệu thật; người học tự chụp minh chứng.
-- [ ] 06. Triển khai Loki + Promtail và 2–3 query LogQL (mốc commit 3 trong đề).
+- [x] 06. Triển khai Loki + Promtail và 3 query LogQL (mốc commit 3 trong đề). Đã kiểm tra log mới thực tế, datasource Grafana kết nối thành công; người học tự chụp minh chứng.
 - [ ] 07. Kiểm chứng ít nhất 3–4 biện pháp hardening.
 - [ ] 08. Hoàn thiện hướng dẫn chạy, báo cáo ít nhất 10 trang và demo.
 

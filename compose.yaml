@@ -135,6 +135,28 @@ services:
     networks: [monitor_net]
     depends_on: [prometheus]
     restart: unless-stopped
+  loki:
+    image: grafana/loki:latest
+    command: ["-config.file=/etc/loki/config.yml"]
+    ports: ["127.0.0.1:3136:3100"]
+    volumes:
+      - ./monitoring/loki.yml:/etc/loki/config.yml:ro
+      - loki_data:/loki
+    networks: [monitor_net]
+    restart: unless-stopped
+  promtail:
+    image: grafana/promtail:latest
+    user: "0:0"
+    command: ["-config.file=/etc/promtail/config.yml"]
+    volumes:
+      - ./monitoring/promtail.yml:/etc/promtail/config.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - promtail_positions:/positions
+    networks: [monitor_net]
+    depends_on: [loki]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
   pgadmin:
     image: dpage/pgadmin4:8.14
     environment:
@@ -158,3 +180,5 @@ volumes:
   pgadmin_data:
   prometheus_data:
   grafana_data:
+  loki_data:
+  promtail_positions:
