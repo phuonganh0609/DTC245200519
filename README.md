@@ -14,7 +14,9 @@ Website quản lý cư dân, phí dịch vụ, thông báo và khiếu nại. C�
 
 Đã kiểm chứng kết nối DB, bốn trang chức năng, thao tác thêm/sửa/xóa cư dân, bảo vệ CSRF, user non-root và quyền DB hạn chế. Đã đăng nhập và kết nối pgAdmin với PostgreSQL.
 
-Chưa hoàn thành Nginx, Prometheus/Grafana, Loki/Promtail và nghiệm thu hardening tổng thể. Đây là giai đoạn đầu của đề tài, chưa đạt toàn bộ tiêu chí.
+Đã triển khai Nginx reverse proxy và kiểm tra ba security headers trên các trang chức năng và phản hồi lỗi 404. Website tại cổng 8036 đi qua Nginx; container web chỉ truy cập trong mạng Docker. Phần này dùng HTTP với security headers theo lựa chọn được đề tài cho phép, chưa có HTTPS.
+
+Chưa hoàn thành Prometheus/Grafana, Loki/Promtail và nghiệm thu hardening tổng thể; chưa đạt toàn bộ tiêu chí.
 
 ## Chạy trong Ubuntu WSL2
 
@@ -24,9 +26,10 @@ Chưa hoàn thành Nginx, Prometheus/Grafana, Loki/Promtail và nghiệm thu har
 python3 scripts/prepare-env.py
 docker compose up -d --build
 bash scripts/verify.sh
+python3 scripts/verify-nginx.py
 ```
 
-- Website: http://localhost:8036
+- Website qua Nginx: http://localhost:8036
 - pgAdmin: http://localhost:8136
 - Thông tin đăng nhập pgAdmin nằm trong `.env`: `PGADMIN_EMAIL`, `PGADMIN_PASSWORD`.
 - Đăng ký server trong pgAdmin: host `db`, port `5432`, database `chungcu_dtc245200519`, username từ `POSTGRES_USER`, password từ `POSTGRES_PASSWORD`.
@@ -47,6 +50,7 @@ Volume `db_data` và `pgadmin_data` giữ dữ liệu. Script `db/init.sh` chỉ
 - [Checklist tiêu chí và tiến độ](docs/checklist.md)
 - [Khung báo cáo thực hành](docs/bao-cao-thuc-hanh.md)
 - [Bước 1: web, database và hướng dẫn chụp minh chứng](docs/buoc-01-web-db.md)
+- [Bước 2: Nginx reverse proxy và security headers](docs/buoc-02-nginx.md)
 
 ## Quy tắc thực hiện
 
