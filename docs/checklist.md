@@ -22,7 +22,7 @@ Các ô chưa đánh dấu là công việc chưa được nghiệm thu. Danh s�
 - [x] 04. Triển khai Nginx reverse proxy và security headers (mốc commit 1 trong đề). Đã kiểm tra bốn trang chức năng, health endpoint và headers trên HTTP 404; người học tự chụp minh chứng.
 - [x] 05. Triển khai giám sát container, Nginx, PostgreSQL (mốc commit 2 trong đề). Bốn targets UP; mọi panel dashboard có dữ liệu thật; người học tự chụp minh chứng.
 - [x] 06. Triển khai Loki + Promtail và 3 query LogQL (mốc commit 3 trong đề). Đã kiểm tra log mới thực tế, datasource Grafana kết nối thành công; người học tự chụp minh chứng.
-- [ ] 07. Kiểm chứng ít nhất 3–4 biện pháp hardening.
+- [x] 07. Kiểm chứng năm nhóm hardening bằng scripts/verify-hardening.py: non-root/hạn chế quyền, mạng/cổng, cấu hình bí mật, headers, quyền DB. Kiểm tra thực tế thành công ngày 14/10/2026; người học tự chụp minh chứng theo docs/buoc-05-bao-mat.md.
 - [ ] 08. Hoàn thiện hướng dẫn chạy, báo cáo ít nhất 10 trang và demo.
 
 Mỗi nhiệm vụ hoàn thành đều commit/push theo yêu cầu người học. Các commit chuẩn bị không thay thế ba mốc kỹ thuật Nginx, giám sát và log.

@@ -20,7 +20,7 @@ Website quản lý cư dân, phí dịch vụ, thông báo và khiếu nại. C�
 
 Đã triển khai Loki + Promtail và datasource Loki-De36 trong Grafana. Ba query LogQL đã trả log HTTP mới thực tế. Promtail chỉ thu log web, Nginx, PostgreSQL và pgAdmin của project đề 36.
 
-Chưa hoàn thành nghiệm thu hardening tổng thể và báo cáo cuối cùng; chưa đạt toàn bộ tiêu chí.
+Đã kiểm chứng năm nhóm hardening trên các dịch vụ đang chạy: web/Nginx non-root và hạn chế quyền container, cô lập mạng/cổng, cấu hình bí mật không đưa vào Git, security headers và quyền PostgreSQL hạn chế. Báo cáo cuối cùng và bộ minh chứng của người học chưa hoàn thiện; chưa xác nhận đạt toàn bộ tiêu chí.
 
 ## Chạy trong Ubuntu WSL2
 
@@ -35,6 +35,7 @@ bash scripts/verify.sh
 python3 scripts/verify-nginx.py
 python3 scripts/verify-monitoring.py
 python3 scripts/verify-logs.py
+python3 scripts/verify-hardening.py
 ```
 
 - Website qua Nginx: http://localhost:8036
@@ -68,6 +69,7 @@ Volume `db_data` và `pgadmin_data` giữ dữ liệu. Script `db/init.sh` chỉ
 - [Bước 2: Nginx reverse proxy và security headers](docs/buoc-02-nginx.md)
 - [Bước 3: Giám sát bằng Prometheus và Grafana](docs/buoc-03-giam-sat.md)
 - [Bước 4: Log tập trung và ba truy vấn LogQL](docs/buoc-04-log.md)
+- [Bước 5: Kiểm chứng bảo mật và hướng dẫn chụp minh chứng](docs/buoc-05-bao-mat.md)
 
 ## Quy tắc thực hiện
 
